@@ -1,11 +1,11 @@
 let RADIUS = 33;
-let gravity = 0.25;
+let gravity = 0.27;
 
 const lines = [];
 const line_spacing = 50;
 
 let balls = [];     // ALL active balls
-let spawnInterval = 150;   // frames between new balls
+let spawnInterval = 165;   // frames between new balls
 let frameCountSinceSpawn = 0;
 
 
@@ -24,7 +24,7 @@ class Ball {
     this.instantSquish = 0;
     this.squishFactor = 20;
     this.squishHistory = [];
-    this.K = 6;
+    this.K = 5;
 
     // line hits
     this.linesHit = lines.map(() => false);
@@ -89,10 +89,10 @@ class Ball {
 // p5 setup
 // ----------------------------------------------------------
 function setup() {
-  createCanvas(200, 600);
+  createCanvas(200, 400);
 
   // horizontal lines
-  for (let y = 75; y <= height - 300; y += line_spacing) {
+  for (let y = 50; y <= height - 200; y += line_spacing) {
     lines.push(y);
   }
 
