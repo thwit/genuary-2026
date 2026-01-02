@@ -158,6 +158,8 @@ function draw() {
     for (let [vx, vy] of poly) vertex(vx, vy);
     endShape(CLOSE);
   }
+  addRandomOffsetToPixels()
+  addNoise()
 
 }
 
@@ -173,4 +175,30 @@ function fib(n) {
     b = t;
   }
   return b;
+}
+
+function addNoise() {
+  for (let i=0; i<10000; i++) {
+    let c = color(colors[random(colors.length)])
+    c.setAlpha(6)
+    stroke(c)
+    noFill()
+    strokeWeight(0.3)
+    circle(random(-width, width*2), random(-height, height*2), random(250,700))
+  }
+}
+
+function addRandomOffsetToPixels(offsetRange = 12) {
+  loadPixels();
+
+  // Each pixel uses 4 array entries: R, G, B, A
+  for (let i = 0; i < pixels.length; i += 4) {
+    // Apply random offset to R, G, B channels
+    pixels[i]     = constrain(pixels[i]     + random(-offsetRange, offsetRange), 0, 255); // R
+    pixels[i + 1] = constrain(pixels[i + 1] + random(-offsetRange, offsetRange), 0, 255); // G
+    pixels[i + 2] = constrain(pixels[i + 2] + random(-offsetRange, offsetRange), 0, 255); // B
+    // Alpha (pixels[i+3]) left unchanged
+  }
+
+  updatePixels();
 }
