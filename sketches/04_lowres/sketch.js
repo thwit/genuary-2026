@@ -1,7 +1,8 @@
 let img;
 
 async function setup() {
-  img = await loadImage('image.jpg');
+  img = await loadImage('IMG_3402.JPEG');
+  img.resize(int(img.width / 3.2), int(img.height / 3.2))
   createCanvas(img.width, img.height);
   noLoop();
 }
@@ -44,6 +45,7 @@ function draw() {
       let index = 4 * (y * w + x);
       let p = columnPixels[y];
 
+
       img.pixels[index + 0] = p.r;
       img.pixels[index + 1] = p.g;
       img.pixels[index + 2] = p.b;
@@ -58,8 +60,6 @@ function draw() {
 
 // Simple perceptual brightness function
 function brightnessFromRGB(r, g, b) {
-  if (random() > 0.6 ) {
-    return b 
-  }
-    return 0.299 * r + 0.587 * g + 0.114 * b;
+  return 255-max(b + random(-125, 125), max(r + random(-125, 125),g + random(-125, 125)))
+  return 0.299 * r + 0.e587 * g + 0.114 * b;
 }
