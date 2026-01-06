@@ -2,7 +2,7 @@ let eyeCenters = [];
 let eyeBlink = [];
 let lightsOn = false;
 let bgcolor = 33;
-
+let counter = 0;
 
 function setup() {
   createCanvas(600, 600);
@@ -90,6 +90,7 @@ function draw() {
       mVec = createVector(mouseX, mouseY);
       diff = pupCenter.copy().sub(mVec);
     } else {
+      
       //pupCenter.add(createVector(4 * map(noise(pupCenter.x * 0.01, pupCenter.y * 0.01, 1000 + frameCount * 0.01), 0, 1, -1, 1), 4 * map(noise(pupCenter.x * 0.01, pupCenter.y * 0.01, frameCount * 0.01), 0, 1, -1, 1)))
       pupCenter.add(createVector(random(-.45, .45), random(-.45, .45)))
     }
@@ -105,5 +106,6 @@ function mousePressed() {
   lightsOn = !lightsOn
   bgcolor = bgcolor == 33? "#F5F2F2" : 33;
   background(33)
+  counter = 0;
 
 }
