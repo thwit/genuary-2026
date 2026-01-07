@@ -1,13 +1,14 @@
 let cols, rows;
-let cellSize = 6;
+let cellSize = 5;
 let grid;
 let nextGrid;
+let coords = [];
 
 // Colors for cell age
 let colors = ['#111', '#0F0', '#3F3', '#6F6', '#9F9', '#CFC'];
 
 function setup() {
-  createCanvas(600, 400);
+  createCanvas(600, 600);
   cols = floor(width / cellSize);
   rows = floor(height / cellSize);
 
@@ -24,8 +25,20 @@ function setup() {
 
   frameRate(100);
   background(33);
-}
 
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      coords.push([i, j]);
+    }
+  }
+
+  // sort only once
+  coords.sort((a, b) => random(-0.2, 0.2) + noise(a[0]*0.1, a[1]*0.07) - noise(b[0]*0.07, b[1]*0.03));
+
+    saving = true;
+    //saveGif("genuary09", 10)
+}
+let saving = false;
 function draw() {
   background(33, 10);
 
@@ -36,17 +49,21 @@ function draw() {
       if (age > 0 && age < 5) {
         fill(220,33,50,150);
         noStroke()
+        
         rect(i * cellSize, j * cellSize, cellSize, cellSize);
+        //circle(i * cellSize, j * cellSize, cellSize);
       }
     }
   }
 
-  // Compute next generation
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      nextGrid[i][j] = computeNextState(i, j);
-    }
+  // Compute next generation in noise-driven order
+  for (let k = 0; k < coords.length; k++) {
+    let i = coords[k][0];
+    let j = coords[k][1];
+    nextGrid[i][j] = computeNextState(i, j);
   }
+
+
 
   // Swap grids
   let temp = grid;
@@ -78,7 +95,7 @@ function computeNextState(x, y) {
 
   // Dead cell grows into empty space if adjacent to a live cell
   if (state === 0 && liveNeighbors > 0) {
-    if (emptyNeighbors.length > 0 && random() < 0.175) {
+    if (emptyNeighbors.length > 0 && random() < 0.125*liveNeighbors) {
       // Pick one empty neighbor randomly for growth
       let [nx, ny] = random(emptyNeighbors);
       nextGrid[nx][ny] = 1; // move/grow into empty space
@@ -94,10 +111,10 @@ function computeNextState(x, y) {
     if (age > 20) return int(random() > 0.5)
 
     // Lonely or overcrowded cells die
-    if (liveNeighbors < 1 || liveNeighbors > 6) return 0;
+    if (liveNeighbors < 1 || liveNeighbors > 5) return 0;
 
     // Move toward empty space with some probability
-    if (emptyNeighbors.length > 0 && random() < 0.3) {
+    if (emptyNeighbors.length > 0 && random() < 0.3 + int(liveNeighbors > 3)*0.1) {
       let [nx, ny] = random(emptyNeighbors);
       nextGrid[nx][ny] = age; // move cell into empty spot
       return 0; // original spot becomes empty
